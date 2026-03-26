@@ -1,0 +1,41 @@
+{
+  "name": "quantumtecnology/falcon-datahub-sdk",
+  "description": "PHP SDK for the Falcon DataHub API — CEP, CNPJ, NCM, FIPE, BCB, and more Brazilian data services",
+  "license": "MIT",
+  "type": "library",
+  "keywords": [
+    "falcon",
+    "datahub",
+    "cep",
+    "cnpj",
+    "ncm",
+    "fipe",
+    "brasil",
+    "api",
+    "sdk"
+  ],
+  "homepage": "https://github.com/Quantum-Tecnology/falcon-datahub-sdk-php",
+  "authors": [
+    {
+      "name": "Luis Gustavo Santarosa",
+      "email": "gustavo-computacao@hotmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^8.0",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "suggest": {
+    "psr/simple-cache": "For persistent token caching (PSR-16)",
+    "psr/log": "For logging HTTP requests (PSR-3)"
+  },
+  "autoload": {
+    "psr-4": {
+      "QuantumTecnology\\FalconDataHub\\": "src/"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
