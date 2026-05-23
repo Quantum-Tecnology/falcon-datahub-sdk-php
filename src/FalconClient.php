@@ -26,6 +26,7 @@ use QuantumTecnology\FalconDataHub\Resources\Lookup\CnaeResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\CnpjResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\IpResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\NcmResource;
+use QuantumTecnology\FalconDataHub\Resources\Lookup\VehicleResource;
 use QuantumTecnology\FalconDataHub\Resources\Plans\PlanResource;
 use QuantumTecnology\FalconDataHub\Resources\Products\ProductResource;
 use QuantumTecnology\FalconDataHub\Resources\Subscriptions\SubscriptionResource;
@@ -73,6 +74,11 @@ final class FalconClient
     public function ncm(): NcmResource
     {
         return new NcmResource($this->http, $this->tokenManager, $this->config);
+    }
+
+    public function vehicle(): VehicleResource
+    {
+        return new VehicleResource($this->http, $this->tokenManager, $this->config);
     }
 
     public function action(): ActionResource
