@@ -160,13 +160,18 @@ $years  = Falcon::fipe()->years('carros', '59', '5940');
 $price  = Falcon::fipe()->price('carros', '59', '5940', '2024-1');
 ```
 
-### Fiscal (CFOP, CST)
+### Fiscal (CFOP, CST, Lista de Serviço Nacional)
 
 ```php
 $cfops = Falcon::fiscal()->cfopList();
 $cfop  = Falcon::fiscal()->cfop('5102');
 $csts  = Falcon::fiscal()->cstList('ICMS');
 $cst   = Falcon::fiscal()->cst('ICMS', '00');
+
+// Lista de Serviço Nacional (cTribNac) — NFS-e Padrão Nacional
+$servicos = Falcon::fiscal()->serviceCodesList('software');       // busca paginada
+$servicos = Falcon::fiscal()->serviceCodesList(item: 1, page: 2); // filtra item da LC 116
+$servico  = Falcon::fiscal()->serviceCode(42);                    // por id
 ```
 
 ### Produtos (Inteligencia de Precos)
