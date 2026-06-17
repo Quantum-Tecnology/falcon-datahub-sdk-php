@@ -34,4 +34,39 @@ final class FiscalResource extends AbstractResource
     {
         return $this->get("private/v1/fiscal/cst/{$type}/{$code}");
     }
+
+    /**
+     * Lista a Lista de Serviço Nacional (cTribNac) — paginada, com busca por
+     * descrição/código e filtro por item da LC 116.
+     *
+     * @param string|null $search termo (descrição ou código, ex.: "software", "08.02")
+     * @param int|null    $item   item da LC 116 (ex.: 1 = informática)
+     * @param int|null    $page   página (paginação do DataHub)
+     */
+    public function serviceCodesList(
+        ?string $search = null,
+        ?int $item = null,
+        ?int $page = null,
+    ): ApiResponse {
+        $query = [];
+
+        if ($search !== null && $search !== '') {
+            $query['search'] = $search;
+        }
+
+        if ($item !== null) {
+            $query['filter']['item'] = $item;
+        }
+
+        if ($page !== null) {
+            $query['page'] = $page;
+        }
+
+        return $this->get('private/v1/service-codes', $query);
+    }
+
+    public function serviceCode(int $id): ApiResponse
+    {
+        return $this->get("private/v1/service-codes/{$id}");
+    }
 }
