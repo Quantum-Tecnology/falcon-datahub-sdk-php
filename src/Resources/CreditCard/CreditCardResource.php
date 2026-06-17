@@ -11,7 +11,7 @@ final class CreditCardResource extends AbstractResource
 {
     public function list(): ApiResponse
     {
-        return $this->get('private/v1/credit-cards');
+        return $this->get('panel/v1/credit-cards');
     }
 
     /**
@@ -19,11 +19,11 @@ final class CreditCardResource extends AbstractResource
      */
     public function create(array $data): ApiResponse
     {
-        return $this->post('private/v1/credit-cards', $data);
+        return $this->post('panel/v1/credit-cards', $data);
     }
 
     public function destroy(int $id): ApiResponse
     {
-        return $this->delete("private/v1/credit-cards/{$id}");
+        return $this->delete("panel/v1/credit-cards/{$id}");
     }
 }

@@ -11,11 +11,11 @@ final class PlanResource extends AbstractResource
 {
     public function list(): ApiResponse
     {
-        return $this->get('private/v1/plans');
+        return $this->get('panel/v1/plans');
     }
 
     public function show(int $id): ApiResponse
     {
-        return $this->get("private/v1/plans/{$id}");
+        return $this->get("panel/v1/plans/{$id}");
     }
 }

@@ -11,12 +11,12 @@ final class AccessSessionResource extends AbstractResource
 {
     public function recent(): ApiResponse
     {
-        return $this->get('private/v1/access-sessions');
+        return $this->get('panel/v1/access-sessions');
     }
 
     public function blocked(): ApiResponse
     {
-        return $this->get('private/v1/access-sessions/blocked');
+        return $this->get('panel/v1/access-sessions/blocked');
     }
 
     /**
@@ -24,11 +24,11 @@ final class AccessSessionResource extends AbstractResource
      */
     public function block(array $data): ApiResponse
     {
-        return $this->post('private/v1/access-sessions/block', $data);
+        return $this->post('panel/v1/access-sessions/block', $data);
     }
 
     public function unblock(int $id): ApiResponse
     {
-        return $this->delete("private/v1/access-sessions/block/{$id}");
+        return $this->delete("panel/v1/access-sessions/block/{$id}");
     }
 }

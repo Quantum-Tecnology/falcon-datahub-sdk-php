@@ -11,7 +11,7 @@ final class ApiKeyResource extends AbstractResource
 {
     public function list(): ApiResponse
     {
-        return $this->get('private/v1/api-keys');
+        return $this->get('panel/v1/api-keys');
     }
 
     /**
@@ -19,11 +19,11 @@ final class ApiKeyResource extends AbstractResource
      */
     public function create(array $data = []): ApiResponse
     {
-        return $this->post('private/v1/api-keys', $data);
+        return $this->post('panel/v1/api-keys', $data);
     }
 
     public function destroy(int $id): ApiResponse
     {
-        return $this->delete("private/v1/api-keys/{$id}");
+        return $this->delete("panel/v1/api-keys/{$id}");
     }
 }

@@ -11,12 +11,12 @@ final class SubscriptionResource extends AbstractResource
 {
     public function list(): ApiResponse
     {
-        return $this->get('private/v1/subscriptions');
+        return $this->get('panel/v1/subscriptions');
     }
 
     public function active(): ApiResponse
     {
-        return $this->get('private/v1/subscriptions/active');
+        return $this->get('panel/v1/subscriptions/active');
     }
 
     /**
@@ -24,7 +24,7 @@ final class SubscriptionResource extends AbstractResource
      */
     public function create(array $data): ApiResponse
     {
-        return $this->post('private/v1/subscriptions', $data);
+        return $this->post('panel/v1/subscriptions', $data);
     }
 
     /**
@@ -32,11 +32,11 @@ final class SubscriptionResource extends AbstractResource
      */
     public function changePlan(array $data): ApiResponse
     {
-        return $this->put('private/v1/subscriptions/change-plan', $data);
+        return $this->put('panel/v1/subscriptions/change-plan', $data);
     }
 
     public function cancel(): ApiResponse
     {
-        return $this->post('private/v1/subscriptions/cancel');
+        return $this->post('panel/v1/subscriptions/cancel');
     }
 }
