@@ -69,4 +69,49 @@ final class FiscalResource extends AbstractResource
     {
         return $this->get("private/v1/service-codes/{$id}");
     }
+
+    /**
+     * Lista o de-para do Código de Tributação Municipal (cTribMun) — paginado,
+     * com busca e filtros por município (IBGE) e código nacional (cTribNac).
+     *
+     * O cTribMun NÃO é derivável do cTribNac: cada prefeitura administra sua
+     * própria lista. Para resolver o cTribMun de uma emissão, filtre por
+     * municipio_ibge + c_trib_nac (retorna a linha única daquele município).
+     *
+     * @param string|null $municipioIbge IBGE de 7 dígitos do município (ex.: "3501608")
+     * @param string|null $cTribNac      código nacional de 6 dígitos (ex.: "080201")
+     * @param string|null $search        termo (descrição, cTribNac ou cTribMun)
+     * @param int|null    $page          página (paginação do DataHub)
+     */
+    public function municipalServiceCodesList(
+        ?string $municipioIbge = null,
+        ?string $cTribNac = null,
+        ?string $search = null,
+        ?int $page = null,
+    ): ApiResponse {
+        $query = [];
+
+        if ($municipioIbge !== null && $municipioIbge !== '') {
+            $query['filter']['municipio_ibge'] = $municipioIbge;
+        }
+
+        if ($cTribNac !== null && $cTribNac !== '') {
+            $query['filter']['c_trib_nac'] = $cTribNac;
+        }
+
+        if ($search !== null && $search !== '') {
+            $query['search'] = $search;
+        }
+
+        if ($page !== null) {
+            $query['page'] = $page;
+        }
+
+        return $this->get('private/v1/municipal-service-codes', $query);
+    }
+
+    public function municipalServiceCode(int $id): ApiResponse
+    {
+        return $this->get("private/v1/municipal-service-codes/{$id}");
+    }
 }
