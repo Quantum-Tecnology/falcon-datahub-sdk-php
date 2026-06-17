@@ -30,6 +30,7 @@ use QuantumTecnology\FalconDataHub\Resources\Lookup\VehicleResource;
 use QuantumTecnology\FalconDataHub\Resources\Plans\PlanResource;
 use QuantumTecnology\FalconDataHub\Resources\Products\ProductResource;
 use QuantumTecnology\FalconDataHub\Resources\Subscriptions\SubscriptionResource;
+use QuantumTecnology\FalconDataHub\Resources\Usage\UsageResource;
 use QuantumTecnology\FalconDataHub\Resources\Validation\ValidateResource;
 use QuantumTecnology\FalconDataHub\Resources\Xml\XmlResource;
 
@@ -154,6 +155,11 @@ final class FalconClient
     public function subscriptions(): SubscriptionResource
     {
         return new SubscriptionResource($this->http, $this->tokenManager, $this->config);
+    }
+
+    public function usage(): UsageResource
+    {
+        return new UsageResource($this->http, $this->tokenManager, $this->config);
     }
 
     public function apiKeys(): ApiKeyResource

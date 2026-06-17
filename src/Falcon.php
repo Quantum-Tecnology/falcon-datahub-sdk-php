@@ -26,6 +26,7 @@ use QuantumTecnology\FalconDataHub\Resources\Lookup\VehicleResource;
 use QuantumTecnology\FalconDataHub\Resources\Plans\PlanResource;
 use QuantumTecnology\FalconDataHub\Resources\Products\ProductResource;
 use QuantumTecnology\FalconDataHub\Resources\Subscriptions\SubscriptionResource;
+use QuantumTecnology\FalconDataHub\Resources\Usage\UsageResource;
 use QuantumTecnology\FalconDataHub\Resources\Validation\ValidateResource;
 use QuantumTecnology\FalconDataHub\Resources\Xml\XmlResource;
 
@@ -159,6 +160,11 @@ final class Falcon
     public static function subscriptions(): SubscriptionResource
     {
         return self::client()->subscriptions();
+    }
+
+    public static function usage(): UsageResource
+    {
+        return self::client()->usage();
     }
 
     public static function apiKeys(): ApiKeyResource
