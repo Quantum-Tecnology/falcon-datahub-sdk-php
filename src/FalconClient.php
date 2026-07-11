@@ -27,6 +27,7 @@ use QuantumTecnology\FalconDataHub\Resources\Lookup\CnpjResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\IpResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\NcmResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\VehicleResource;
+use QuantumTecnology\FalconDataHub\Resources\MarketData\MarketDataResource;
 use QuantumTecnology\FalconDataHub\Resources\Plans\PlanResource;
 use QuantumTecnology\FalconDataHub\Resources\Products\ProductResource;
 use QuantumTecnology\FalconDataHub\Resources\Subscriptions\SubscriptionResource;
@@ -85,6 +86,11 @@ final class FalconClient
     public function action(): ActionResource
     {
         return new ActionResource($this->http, $this->tokenManager, $this->config);
+    }
+
+    public function marketData(): MarketDataResource
+    {
+        return new MarketDataResource($this->http, $this->tokenManager, $this->config);
     }
 
     public function ip(): IpResource

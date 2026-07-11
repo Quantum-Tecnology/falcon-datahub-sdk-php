@@ -23,6 +23,7 @@ use QuantumTecnology\FalconDataHub\Resources\Lookup\CnpjResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\IpResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\NcmResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\VehicleResource;
+use QuantumTecnology\FalconDataHub\Resources\MarketData\MarketDataResource;
 use QuantumTecnology\FalconDataHub\Resources\Plans\PlanResource;
 use QuantumTecnology\FalconDataHub\Resources\Products\ProductResource;
 use QuantumTecnology\FalconDataHub\Resources\Subscriptions\SubscriptionResource;
@@ -90,6 +91,11 @@ final class Falcon
     public static function action(): ActionResource
     {
         return self::client()->action();
+    }
+
+    public static function marketData(): MarketDataResource
+    {
+        return self::client()->marketData();
     }
 
     public static function ip(): IpResource

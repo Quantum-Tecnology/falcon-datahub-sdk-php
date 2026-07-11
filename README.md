@@ -111,6 +111,24 @@ $result = Falcon::ip()->search('8.8.8.8', databaseId: 1);
 $result = Falcon::action()->search('PETR4');
 ```
 
+### Market Data / Candles (Cripto)
+
+Candles OHLCV de cripto, coletados da Binance sob demanda e cacheados no DataHub.
+O par aceita `BTC/USDT` ou `BTCUSDT`; o timeframe segue os intervalos da Binance
+(`1m`, `5m`, `15m`, `30m`, `1h`, `4h`, `1d`, `1w`).
+
+```php
+// Candles estruturados (para exibir/consumir)
+$candles = Falcon::marketData()->candles('BTC/USDT', '1h', '2026-07-01', '2026-07-10');
+
+// Dump cru [[ts_ms, open, high, low, close, volume], ...] — formato Binance/Freqtrade.
+// Pronto para gravar data/binance/{PAR}_{QUOTE}-{tf}.json e rodar o backtest.
+$dump = Falcon::marketData()->dump('BTC/USDT', '5m', '2026-07-01', '2026-07-10');
+
+// Pares ja cacheados + cobertura
+$pairs = Falcon::marketData()->pairs();
+```
+
 ### Cidades e Estados
 
 ```php
