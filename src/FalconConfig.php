@@ -19,6 +19,15 @@ final class FalconConfig
     /** @var object|null PSR-3 LoggerInterface */
     private ?object $logger;
 
+    /**
+     * @param int $timeout Segundos até desistir da resposta.
+     *
+     *                     ⚠️ 30s serve para consulta (CEP, CNPJ) mas NÃO para
+     *                     IA: uma resposta de ~800 tokens leva 20-25s na GPU, e
+     *                     texto mais longo estoura. Quem usa `Falcon::ai()`
+     *                     deve subir para **120**. O sintoma de errar aqui
+     *                     engana: não vem erro, a chamada só não retorna.
+     */
     public function __construct(
         string $baseUrl,
         ?string $token = null,

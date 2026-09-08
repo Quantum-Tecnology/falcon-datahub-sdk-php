@@ -31,12 +31,32 @@ final class AiResource extends AbstractResource
      * ou `falcon-quality` (escreve melhor, demora um pouco mais). Nunca peça o
      * nome físico do modelo: ele muda quando trocamos o motor, e o lógico não.
      *
-     * ⚠️ `max_tokens` baixo demais devolve resposta VAZIA em modelo de
-     * reasoning: ele gasta a cota pensando antes de escrever. O padrão do
-     * servidor (2000) já cobre isso — só mexa se souber por quê.
+     * ## Quanto isso demora, e o que fazer a respeito
+     *
+     * A GPU gera de 35 a 75 tokens por segundo (medido). Uma resposta de ~800
+     * tokens leva **20 a 25 segundos** — e o prompt conta: 3.000 tokens de
+     * histórico somam alguns segundos antes de a resposta começar.
+     *
+     * Por isso, **configure o timeout do seu cliente HTTP para pelo menos
+     * 120s**. Com 30s (o padrão de muitas libs) respostas longas estouram, e o
+     * sintoma engana: não vem erro nenhum, a chamada só não retorna. Foi assim
+     * que a IA de atendimento "parou de responder" certas mensagens — as que
+     * pediam o catálogo, justamente as que geram texto longo.
+     *
+     * ## `max_tokens`: o teto é do SEU canal
+     *
+     * O padrão do servidor (2000) é generoso porque este serviço atende vários
+     * produtos — resumo fiscal e análise precisam de espaço. Mas o limite certo
+     * depende de onde a resposta vai aparecer: para WhatsApp, 800 já é
+     * bastante (ninguém lê oito parágrafos no celular) e corta o tempo pela
+     * metade. Defina no seu lado; não conte com o padrão do serviço.
+     *
+     * ⚠️ Baixo DEMAIS devolve resposta **vazia**: modelo de reasoning gasta a
+     * cota pensando antes de escrever. Abaixo de ~500 é arriscado, e com 400 já
+     * foi medido voltar em branco.
      *
      * @param array<int, array{role: string, content: string}> $messages
-     * @param array<string, mixed>                             $options `max_tokens`, `temperature`
+     * @param array<string, mixed>                             $options `max_tokens` (padrão 2000, teto 4096), `temperature`
      */
     public function chat(array $messages, string $model = 'falcon-quality', array $options = []): ApiResponse
     {

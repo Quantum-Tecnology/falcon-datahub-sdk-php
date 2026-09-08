@@ -99,6 +99,45 @@ Falcon::ai()->models();
 segundos, `falcon-quality` escreve melhor. O modelo real por tras pode mudar
 sem aviso — o nome logico continua valendo.
 
+#### ⚠️ Timeout: use 120s, nao 30s
+
+A GPU gera de 35 a 75 tokens por segundo. Uma resposta de ~800 tokens leva
+**20 a 25 segundos**, e o prompt tambem conta (3.000 tokens de historico somam
+alguns segundos antes de a resposta comecar).
+
+```php
+Falcon::configure(new FalconConfig(
+    baseUrl: 'https://beta.falcon-server.com.br/data-hub',
+    email: '...', password: '...',
+    timeout: 120,   // <- o padrao de 30s NAO basta para IA
+));
+```
+
+Com 30s, respostas longas estouram — e o sintoma engana: nao vem erro nenhum,
+a chamada so nao retorna. Foi assim que uma IA de atendimento "parou de
+responder" justamente as perguntas que pediam o catalogo, que geram texto
+longo.
+
+#### `max_tokens`: o teto e do SEU canal
+
+O padrao do servidor e **2000** (teto 4096), generoso porque este servico
+atende varios produtos — resumo fiscal e analise precisam de espaco. Mas o
+limite certo depende de onde a resposta vai aparecer:
+
+| destino | sugestao | por que |
+|---|---|---|
+| WhatsApp / chat | 600-800 | ninguem le oito paragrafos no celular; corta o tempo pela metade |
+| E-mail / resumo | 1500-2000 | texto estruturado precisa de espaco |
+| Analise / relatorio | 2000-4096 | o teto existe para isso |
+
+```php
+Falcon::ai()->chat($messages, 'falcon-quality', ['max_tokens' => 800]);
+```
+
+⚠️ **Baixo demais devolve resposta VAZIA.** Modelo de reasoning gasta a cota
+pensando antes de escrever: abaixo de ~500 e arriscado, e com 400 ja foi medido
+voltar em branco. Se a resposta vier vazia, o primeiro palpite e este.
+
 > O endpoint segue o contrato da **OpenAI** (`/chat/completions`). Se voce ja
 > usa um SDK de IA, da para apontar a `base_url` dele para o DataHub em vez de
 > passar por aqui; este resource existe para nao precisar de um segundo cliente
