@@ -10,6 +10,7 @@ use QuantumTecnology\FalconDataHub\Auth\TokenStore;
 use QuantumTecnology\FalconDataHub\Http\CurlHttpClient;
 use QuantumTecnology\FalconDataHub\Http\HttpClientInterface;
 use QuantumTecnology\FalconDataHub\Resources\AccessSessions\AccessSessionResource;
+use QuantumTecnology\FalconDataHub\Resources\Ai\AiResource;
 use QuantumTecnology\FalconDataHub\Resources\ApiKeys\ApiKeyResource;
 use QuantumTecnology\FalconDataHub\Resources\Auth\AuthResource;
 use QuantumTecnology\FalconDataHub\Resources\Brasil\BrasilResource;
@@ -166,6 +167,12 @@ final class FalconClient
     public function usage(): UsageResource
     {
         return new UsageResource($this->http, $this->tokenManager, $this->config);
+    }
+
+    /** IA servida pela GPU da Falcon, cobrada por token. */
+    public function ai(): AiResource
+    {
+        return new AiResource($this->http, $this->tokenManager, $this->config);
     }
 
     public function apiKeys(): ApiKeyResource

@@ -6,6 +6,7 @@ namespace QuantumTecnology\FalconDataHub;
 
 use QuantumTecnology\FalconDataHub\Exceptions\FalconException;
 use QuantumTecnology\FalconDataHub\Resources\AccessSessions\AccessSessionResource;
+use QuantumTecnology\FalconDataHub\Resources\Ai\AiResource;
 use QuantumTecnology\FalconDataHub\Resources\ApiKeys\ApiKeyResource;
 use QuantumTecnology\FalconDataHub\Resources\Auth\AuthResource;
 use QuantumTecnology\FalconDataHub\Resources\Brasil\BrasilResource;
@@ -171,6 +172,12 @@ final class Falcon
     public static function usage(): UsageResource
     {
         return self::client()->usage();
+    }
+
+    /** IA servida pela GPU da Falcon, cobrada por token. */
+    public static function ai(): AiResource
+    {
+        return self::client()->ai();
     }
 
     public static function apiKeys(): ApiKeyResource

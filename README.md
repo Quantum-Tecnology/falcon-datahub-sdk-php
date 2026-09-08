@@ -70,6 +70,42 @@ $result = $client->cep()->search('13472360');
 
 ## Uso
 
+### IA (Inteligencia Artificial)
+
+Atendida pela GPU da Falcon, com transbordo automatico para provedor pago
+quando ela nao da conta. Cobrada por **token** (entrada e saida contam
+separado), com cota mensal por plano.
+
+```php
+// Pergunta de uma linha
+$r = Falcon::ai()->ask('Explique o que e um CNPJ em uma frase.');
+echo $r->data['choices'][0]['message']['content'];
+
+// Conversa completa (formato OpenAI)
+$r = Falcon::ai()->chat([
+    ['role' => 'system', 'content' => 'Responda em portugues, seja breve.'],
+    ['role' => 'user',   'content' => 'O que e NCM?'],
+], 'falcon-fast');
+
+// Quanto custou
+$r->data['usage']['prompt_tokens'];      // entrada
+$r->data['usage']['completion_tokens'];  // saida
+
+// Modelos aceitos
+Falcon::ai()->models();
+```
+
+**Modelo pelo nome logico**, nunca pelo fisico: `falcon-fast` responde em
+segundos, `falcon-quality` escreve melhor. O modelo real por tras pode mudar
+sem aviso — o nome logico continua valendo.
+
+> O endpoint segue o contrato da **OpenAI** (`/chat/completions`). Se voce ja
+> usa um SDK de IA, da para apontar a `base_url` dele para o DataHub em vez de
+> passar por aqui; este resource existe para nao precisar de um segundo cliente
+> HTTP no projeto.
+
+O consumo do mes aparece em `Falcon::usage()->show()`, no bloco `ai`.
+
 ### CEP (Codigo Postal)
 
 ```php
