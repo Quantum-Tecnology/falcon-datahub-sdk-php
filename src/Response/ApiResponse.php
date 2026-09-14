@@ -75,6 +75,30 @@ class ApiResponse
             }
         }
 
+        /*
+         * Bloco `pagination`, IRMAO de `data` — o formato que a API do DataHub
+         * realmente usa:
+         *
+         *     { data: [...], pagination: { current_page, per_page, total } }
+         *
+         * Ate a 1.6.1 so eram consultados a raiz do corpo e o interior de
+         * `data`, entao `meta` ficava VAZIO em toda listagem. O sintoma nao era
+         * erro: o consumidor recebia a primeira pagina e nada indicava que
+         * havia mais — em /private/v1/cities, milhares de registros viravam 15.
+         *
+         * Os outros dois caminhos continuam valendo: servico que responda no
+         * formato antigo nao pode quebrar por causa desta adicao.
+         */
+        $pagination = $body['pagination'] ?? null;
+
+        if (is_array($pagination)) {
+            foreach (['current_page', 'last_page', 'per_page', 'total', 'from', 'to'] as $key) {
+                if (isset($pagination[$key])) {
+                    $meta[$key] = $pagination[$key];
+                }
+            }
+        }
+
         if (isset($data['current_page'])) {
             foreach (['current_page', 'last_page', 'per_page', 'total', 'from', 'to'] as $key) {
                 if (isset($data[$key])) {

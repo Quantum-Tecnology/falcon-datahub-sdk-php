@@ -37,5 +37,21 @@
     }
   },
   "minimum-stability": "stable",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "require-dev": {
+    "pestphp/pest": "^2.0 || ^3.0"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "QuantumTecnology\\FalconDataHub\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "pest"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
 }
