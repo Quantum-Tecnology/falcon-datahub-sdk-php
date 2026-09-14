@@ -6,6 +6,8 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 **Este arquivo importa mais aqui do que num serviço.** Isto é um pacote: quem consome vê apenas um número de versão no `composer.json`, e hoje três serviços de produção dependem dele — `crmhub` (`^1.0`), `fiscalhub` (`^1.0`) e `trade` (`^1.5`). As duas primeiras constraints aceitam **qualquer 1.x**, então uma mudança de comportamento chega nesses serviços num `composer update` de rotina. Sem este registro, ninguém saberia o que mudou.
 
+⚠️ **Publicar tem DOIS passos manuais.** Criar a tag no GitHub não publica: o **Packagist não está com auto-update**, então é preciso atualizar o pacote lá à mão depois de taguear. Enquanto isso não for feito, `composer require`/`update` continua entregando a versão anterior — e o sintoma é a correção "não ter funcionado" em quem atualizou de boa-fé.
+
 ⚠️ **Atualizar o pacote não basta.** Quem consome trava a versão no `composer.lock`: uma correção publicada aqui só chega ao serviço quando alguém roda o update **naquele** repositório. Vale para correções — e para regressões.
 
 > **Nota sobre o histórico.** As versões `1.0.0` (2026-03-25) a `1.6.1` (2026-09-08) foram publicadas **sem changelog**; as entradas abaixo foram reconstruídas a partir das tags e das mensagens de commit, então descrevem *o que* mudou, não o *porquê* — esse contexto não foi registrado na época e o Git não o reconstrói. A partir da `1.7.0` o formato completo passa a valer.
