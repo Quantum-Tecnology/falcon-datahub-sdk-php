@@ -13,10 +13,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # O composer.json declara php ^8.0. A matriz cobre o piso e o topo:
-        # sem o 8.1 aqui, uma sintaxe de 8.3 passaria no CI e quebraria em
-        # quem ainda roda a versão mínima que o pacote promete suportar.
-        php: ['8.1', '8.4']
+        # ⚠️ O piso REAL do pacote é 8.1 (`src/Response/ApiResponse.php` usa
+        # `readonly`), e o composer.json foi corrigido de ^8.0 para ^8.1.
+        #
+        # A matriz, porém, começa em 8.2: o Pest 2/3 arrasta o
+        # `brianium/paratest`, que exige PHP >= 8.2. Ou seja, a versão mínima
+        # SUPORTADA não é testável com este runner — e é melhor ter isso
+        # escrito aqui do que fingir cobertura que não existe.
+        php: ['8.2', '8.4']
         stability: [prefer-lowest, prefer-stable]
 
     steps:

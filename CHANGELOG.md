@@ -22,7 +22,9 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
   A cobertura começa pelo `ApiResponse`, de propósito: é por onde passa 100% do que a API devolve, e onde os erros do SDK são silenciosos. Quando o desempacotamento falha, o resultado não é exceção — é `null`, array vazio ou dado truncado, e o consumidor segue rodando com dado errado.
 
-- **CI** (`.github/workflows/tests.yml`) rodando em push e PR, em PHP 8.1 e 8.4, com `prefer-lowest` e `prefer-stable`. O 8.1 está na matriz porque o pacote promete `php: ^8.0`: sem ele, sintaxe de 8.3 passaria no CI e quebraria em quem roda a versão mínima suportada.
+- ⚠️ **`php` corrigido de `^8.0` para `^8.1`.** O `composer.json` prometia 8.0, mas `src/Response/ApiResponse.php` usa `readonly`, que é **8.1+** — quem instalasse no 8.0 tomaria erro fatal de sintaxe, não uma recusa do composer. A constraint agora diz a verdade. Foi o CI recém-criado que expôs isso: sem matriz de versões, a promessa errada não tinha como aparecer.
+
+- **CI** (`.github/workflows/tests.yml`) rodando em push e PR, em PHP 8.2 e 8.4, com `prefer-lowest` e `prefer-stable`. ⚠️ A matriz **não cobre o piso do pacote (8.1)**: o Pest arrasta o `brianium/paratest`, que exige PHP 8.2+, então a versão mínima suportada não é testável com este runner. Está escrito no workflow — melhor assumir a lacuna do que fingir uma cobertura que não existe.
 
 ### Corrigido
 
