@@ -19,6 +19,7 @@ use QuantumTecnology\FalconDataHub\Resources\Delivery\DeliveryResource;
 use QuantumTecnology\FalconDataHub\Resources\Finance\BcbResource;
 use QuantumTecnology\FalconDataHub\Resources\Fipe\FipeResource;
 use QuantumTecnology\FalconDataHub\Resources\Fiscal\FiscalResource;
+use QuantumTecnology\FalconDataHub\Resources\IntegrationTokens\IntegrationTokenResource;
 use QuantumTecnology\FalconDataHub\Resources\Location\CityResource;
 use QuantumTecnology\FalconDataHub\Resources\Location\StateResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\ActionResource;
@@ -175,9 +176,20 @@ final class FalconClient
         return new AiResource($this->http, $this->tokenManager, $this->config);
     }
 
+    /**
+     * Chave ANTIGA (token Sanctum): só listar e revogar, até a data de corte.
+     *
+     * @deprecated desde 1.8.0 — use integrationTokens()
+     */
     public function apiKeys(): ApiKeyResource
     {
         return new ApiKeyResource($this->http, $this->tokenManager, $this->config);
+    }
+
+    /** Chaves de integração `fdx_` (uma por sistema, com permissões). */
+    public function integrationTokens(): IntegrationTokenResource
+    {
+        return new IntegrationTokenResource($this->http, $this->tokenManager, $this->config);
     }
 
     public function accessSessions(): AccessSessionResource
