@@ -129,3 +129,21 @@ it('dispara UMA requisição por chamada', function (): void {
 
     expect($http->callCount())->toBe(1);
 });
+
+it('mantém as letras do CNPJ alfanumérico na URL da consulta (NT 2026.004)', function (): void {
+    $config = makeConfig();
+    $http   = fakeClient([
+        jsonResponse(['success' => true, 'message' => 'OK', 'data' => []]),
+    ]);
+
+    $resource = new QuantumTecnology\FalconDataHub\Resources\Lookup\CnpjResource(
+        $http,
+        new TokenManager($http, $config, new TokenStore()),
+        $config,
+    );
+
+    $resource->search('12.abc.345/01de-35');
+
+    // Com sanitizeDigits a URL ia com "123450135" — outro CNPJ, truncado.
+    expect($http->urlAt(0))->toBe('https://datahub.test/private/v1/cnpj/12ABC34501DE35/search');
+});

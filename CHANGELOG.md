@@ -14,6 +14,8 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+## [1.7.1] - 2026-09-27
+
 ### Adicionado
 
 - **Suíte de testes — a primeira do pacote.** Até aqui o SDK tinha **156 métodos públicos em 46 arquivos**, distribuídos por composer para três serviços de produção, e **nenhum teste, nenhum `require-dev`, nenhum CI**. As três redes de proteção faltavam ao mesmo tempo.
@@ -27,6 +29,8 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 - **CI** (`.github/workflows/tests.yml`) rodando em push e PR, em PHP 8.2 e 8.4, com `prefer-lowest` e `prefer-stable`. ⚠️ A matriz **não cobre o piso do pacote (8.1)**: o Pest arrasta o `brianium/paratest`, que exige PHP 8.2+, então a versão mínima suportada não é testável com este runner. Está escrito no workflow — melhor assumir a lacuna do que fingir uma cobertura que não existe.
 
 ### Corrigido
+
+- **CNPJ alfanumérico apagado antes da consulta** (IN RFB 2.229/2024 · NT 2026.004). `cnpj()->search()`, `validate()->cnpj()` e `xml()->search()` limpavam o CNPJ com `sanitizeDigits` (`\D`), que apaga letras: `12.ABC.345/01DE-35` virava `123450135` e a API consultava outro documento, truncado. Novo `sanitizeDocument()` (maiúsculas, `[A-Z0-9]`) — o mesmo tratamento que o `VehicleResource` já dava à placa. CEP, CPF, NCM e CNAE continuam com `sanitizeDigits`.
 
 - 🐛 **A paginação nunca funcionou — em nenhuma das 9 versões publicadas.** `ApiResponse::fromHttpResponse()` montava o `meta` procurando `current_page` em dois lugares: a raiz do corpo e dentro de `data`. Mas a API do Falcon Data Hub responde a paginação num bloco **irmão** de `data`:
 

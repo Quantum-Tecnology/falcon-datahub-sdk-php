@@ -18,7 +18,7 @@ final class ValidateResource extends AbstractResource
 
     public function cnpj(string $cnpj): ApiResponse
     {
-        $cnpj = $this->sanitizeDigits($cnpj);
+        $cnpj = $this->sanitizeDocument($cnpj);
 
         return $this->get("private/v1/validate/cnpj/{$cnpj}");
     }
