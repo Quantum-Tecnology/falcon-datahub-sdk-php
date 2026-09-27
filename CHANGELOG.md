@@ -14,6 +14,8 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+## [1.7.1] - 2026-09-27
+
 ### Adicionado
 
 - **Suíte de testes — a primeira do pacote.** Até aqui o SDK tinha **156 métodos públicos em 46 arquivos**, distribuídos por composer para três serviços de produção, e **nenhum teste, nenhum `require-dev`, nenhum CI**. As três redes de proteção faltavam ao mesmo tempo.
