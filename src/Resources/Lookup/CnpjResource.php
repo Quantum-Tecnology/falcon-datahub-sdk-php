@@ -11,7 +11,7 @@ final class CnpjResource extends AbstractResource
 {
     public function search(string $cnpj): ApiResponse
     {
-        $cnpj = $this->sanitizeDigits($cnpj);
+        $cnpj = $this->sanitizeDocument($cnpj);
 
         return $this->get("private/v1/cnpj/{$cnpj}/search");
     }
