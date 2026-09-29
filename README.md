@@ -16,7 +16,7 @@ composer require quantumtecnology/falcon-datahub-sdk
 
 ## Configuracao
 
-### Com token direto
+### Com chave de integração (recomendado)
 
 ```php
 use QuantumTecnology\FalconDataHub\Falcon;
@@ -24,9 +24,15 @@ use QuantumTecnology\FalconDataHub\FalconConfig;
 
 Falcon::configure(new FalconConfig(
     baseUrl: 'https://datahub.falcon-server.com.br',
-    token: 'seu-token-bearer',
+    token: 'fdx_xxxxxxxx_...', // criada no painel, em Chaves de API
 ));
 ```
+
+A chave `fdx_` é o jeito certo de um **sistema** falar com o DataHub: uma por sistema, com as permissões que ele usa (`data:read`, `ai:chat`, `xmls:write`, `usage:read`). Ela vale nas consultas (`/private`) e age como o dono da conta — o consumo conta na cota do plano dele.
+
+⚠️ Ela **não** vale no painel (`/panel`) nem no admin: para gerenciar chaves, assinatura ou cartões, use o login por credenciais abaixo.
+
+⚠️ **Evite o login por e-mail/senha num sistema que roda sozinho.** O DataHub revoga as sessões da conta a cada login: dois sistemas com a mesma conta derrubam um ao outro.
 
 ### Com login automatico
 
@@ -313,13 +319,35 @@ $change = Falcon::subscriptions()->changePlan(['plan_id' => 2, 'credit_card_id' 
 $cancel = Falcon::subscriptions()->cancel();
 ```
 
-### API Keys
+### Chaves de integração (`fdx_`)
+
+Exige sessão de usuário (login por credenciais): o painel recusa uma chave `fdx_`.
 
 ```php
-$keys   = Falcon::apiKeys()->list();
-$create = Falcon::apiKeys()->create(['expires_in' => 30]);
-$delete = Falcon::apiKeys()->destroy(1);
+$catalogo = Falcon::integrationTokens()->abilities();   // as permissões disponíveis
+$chaves   = Falcon::integrationTokens()->list();
+
+$nova = Falcon::integrationTokens()->create(
+    name: 'Meu ERP',
+    abilities: ['data:read', 'usage:read'],
+    expiresInDays: 90,          // null = não expira
+    riskAccepted: true,         // obrigatório: a chave consome a cota da conta
+);
+$chave = $nova->data['key'];    // ⚠️ aparece SÓ aqui — guarde na hora
+
+Falcon::integrationTokens()->revoke($nova->data['id']);
 ```
+
+Chave sem a permissão da rota recebe `ForbiddenException`, e `getAbility()` diz qual faltou.
+
+### Chave antiga (`api-key`) — em transição
+
+```php
+$antigas = Falcon::apiKeys()->list();       // inclui `sunset_at`, a data de corte
+Falcon::apiKeys()->destroy(1);              // revogar depois de trocar pela fdx_
+```
+
+`apiKeys()->create()` lança exceção desde a 1.8.0: o DataHub não cria mais este tipo de chave.
 
 ### Sessoes de Acesso
 
@@ -349,6 +377,7 @@ O SDK lanca exceptions tipadas para cada cenario:
 
 ```php
 use QuantumTecnology\FalconDataHub\Exceptions\AuthException;
+use QuantumTecnology\FalconDataHub\Exceptions\ForbiddenException;
 use QuantumTecnology\FalconDataHub\Exceptions\NotFoundException;
 use QuantumTecnology\FalconDataHub\Exceptions\RateLimitException;
 use QuantumTecnology\FalconDataHub\Exceptions\ServerException;
@@ -366,6 +395,9 @@ try {
 } catch (RateLimitException $e) {
     // Limite de requisicoes excedido
     echo "Tente novamente em {$e->getRetryAfter()} segundos";
+} catch (ForbiddenException $e) {
+    // A chave fdx_ nao tem a permissao da rota
+    echo "Falta a permissao {$e->getAbility()}";
 } catch (AuthException $e) {
     // Token invalido ou expirado
 } catch (ServerException $e) {

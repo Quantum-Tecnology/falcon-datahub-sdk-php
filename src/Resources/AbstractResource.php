@@ -6,6 +6,7 @@ namespace QuantumTecnology\FalconDataHub\Resources;
 
 use QuantumTecnology\FalconDataHub\Auth\TokenManager;
 use QuantumTecnology\FalconDataHub\Exceptions\AuthException;
+use QuantumTecnology\FalconDataHub\Exceptions\ForbiddenException;
 use QuantumTecnology\FalconDataHub\Exceptions\NotFoundException;
 use QuantumTecnology\FalconDataHub\Exceptions\RateLimitException;
 use QuantumTecnology\FalconDataHub\Exceptions\ServerException;
@@ -107,9 +108,24 @@ abstract class AbstractResource
             return $apiResponse;
         }
 
+        $body = $response->json();
+
         match (true) {
             $statusCode === 401 => throw new AuthException(
                 $apiResponse->message,
+                $statusCode,
+                null,
+                $apiResponse,
+            ),
+            /*
+             * 403: com chave `fdx_`, a chave não tem a permissão da rota
+             * (`code: MISSING_ABILITY`, `ability` diz qual). Até a 1.7, 403 caía
+             * no `default` e voltava como resposta comum — quem integra seguia
+             * achando que a chamada tinha dado certo.
+             */
+            $statusCode === 403 => throw new ForbiddenException(
+                $apiResponse->message,
+                isset($body['ability']) ? (string) $body['ability'] : null,
                 $statusCode,
                 null,
                 $apiResponse,

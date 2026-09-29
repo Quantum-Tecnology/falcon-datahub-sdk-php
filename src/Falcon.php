@@ -15,6 +15,7 @@ use QuantumTecnology\FalconDataHub\Resources\Delivery\DeliveryResource;
 use QuantumTecnology\FalconDataHub\Resources\Finance\BcbResource;
 use QuantumTecnology\FalconDataHub\Resources\Fipe\FipeResource;
 use QuantumTecnology\FalconDataHub\Resources\Fiscal\FiscalResource;
+use QuantumTecnology\FalconDataHub\Resources\IntegrationTokens\IntegrationTokenResource;
 use QuantumTecnology\FalconDataHub\Resources\Location\CityResource;
 use QuantumTecnology\FalconDataHub\Resources\Location\StateResource;
 use QuantumTecnology\FalconDataHub\Resources\Lookup\ActionResource;
@@ -180,9 +181,16 @@ final class Falcon
         return self::client()->ai();
     }
 
+    /** @deprecated desde 1.8.0 — use integrationTokens() */
     public static function apiKeys(): ApiKeyResource
     {
         return self::client()->apiKeys();
+    }
+
+    /** Chaves de integração `fdx_` (uma por sistema, com permissões). */
+    public static function integrationTokens(): IntegrationTokenResource
+    {
+        return self::client()->integrationTokens();
     }
 
     public static function accessSessions(): AccessSessionResource

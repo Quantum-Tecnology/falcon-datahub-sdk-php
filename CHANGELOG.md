@@ -14,6 +14,29 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+## [1.8.0] - 2026-09-29
+
+### Adicionado
+
+- 🔑 **`integrationTokens()` — as chaves `fdx_`, o padrão novo do DataHub.** `list()`, `abilities()` (o catálogo de permissões), `create($name, $abilities, $expiresInDays, $riskAccepted)` e `revoke($id)`. Várias chaves por conta, uma por sistema, cada uma com as permissões que ele usa.
+
+  ⚠️ Gerenciar chaves é ação do **painel**: exige sessão de usuário (login por credenciais). A própria chave `fdx_` é recusada lá.
+
+  `abilities` é obrigatório (ao menos uma): o SDK não inventa um padrão, e a chave tem exatamente o que se pediu. É o que o DataHub exige — omitir daria 422.
+
+- **`ForbiddenException`** para o HTTP 403, com `getAbility()` dizendo a permissão que faltou (`code: MISSING_ABILITY`). Mesmo desenho do `falcon-crmhub-sdk` 1.2.0.
+
+### Corrigido
+
+- 🐛 **403 voltava como resposta comum.** Caía no `default` do tratamento de erro e era devolvido como se tivesse dado certo. Com a chave `fdx_` isso ficou perigoso: uma chave sem `ai:chat` chamando a IA "funcionava" e entregava um corpo de erro que ninguém conferia. Agora lança `ForbiddenException`.
+
+  ⚠️ **Para quem consome (crmhub, fiscalhub, trade — todos em `^1.x`):** depois do `composer update`, um 403 que hoje volta como resposta comum passa a **lançar**. É o comportamento certo, mas quem tratava o 403 olhando `->success` precisa capturar `ForbiddenException` (ou `FalconException`) no lugar.
+
+### Descontinuado
+
+- **`apiKeys()`** — a chave antiga (token Sanctum). O DataHub não cria mais: `apiKeys()->create()` passa a **lançar** `FalconException` com a instrução de usar `integrationTokens()->create()`. Antes ele chamava um endpoint removido, e o 405 voltava como resposta comum — quem chamasse seguiria achando que tinha uma chave nova. `list()` (agora com `sunset_at`, a data de corte) e `destroy()` continuam, para quem ainda precisa revogar a antiga.
+
+
 ## [1.7.1] - 2026-09-27
 
 ### Adicionado
