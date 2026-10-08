@@ -14,6 +14,17 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+### Adicionado
+
+- 🏪 **`products()->search($query, storeIds: ...)`** — filtra a busca pelas lojas onde o produto teve preço coletado. Aceita um id (hashid de `/public/v1/stores`) ou um array; o array vira lista separada por vírgula, que é o que a API lê em `filter[store_id]`.
+- 📅 **`products()->prices($id, observedFrom: ..., observedTo: ...)`** — período de observação no histórico: só o início = a partir de, só o fim = até, os dois = entre. Data pura (`2026-03-21`) vale o dia inteiro nas duas pontas; com hora (ISO 8601), a hora é respeitada.
+
+  ⚠️ **Exige a API nova** (Falcon-BigData-Service `feat/product-search-filtro-loja`). Contra a API antiga os filtros são **ignorados em silêncio**: a chamada funciona e volta sem filtro. Publicar a SDK depois do deploy da API.
+
+### Alterado
+
+- **`products()->prices()` aceita `int|string` no id.** Em produção a API devolve o id do produto como hashid (string), e só aceita hashid na URL — a assinatura `int` impedia de usar o id que a própria busca devolve. `int` continua aceito, então quem já chamava assim não quebra.
+
 ## [1.8.0] - 2026-09-29
 
 ### Adicionado

@@ -277,8 +277,18 @@ $servico  = Falcon::fiscal()->serviceCode(42);                    // por id
 
 ```php
 $product = Falcon::products()->findByEan('7891234567890', region: 'SP');
-$prices  = Falcon::products()->prices(1, region: 'SP');
 $results = Falcon::products()->search('arroz');
+
+// Id do produto como a API devolve (hashid, vindo da busca ou do EAN)
+$prices = Falcon::products()->prices('v5rNVenmKP', region: 'SP');
+
+// Periodo de observacao: a partir de, ate, ou entre (data pura = dia inteiro)
+$marco = Falcon::products()->prices('v5rNVenmKP', observedFrom: '2026-03-01', observedTo: '2026-03-31');
+$ate   = Falcon::products()->prices('v5rNVenmKP', observedTo: '2026-03-21');
+
+// So produtos com preco coletado na(s) loja(s) — ids de /public/v1/stores
+$naLoja = Falcon::products()->search('arroz', storeIds: 'Ke7wJd3NxF');
+$emDuas = Falcon::products()->search('arroz', storeIds: ['Ke7wJd3NxF', 'Yr2gPb5LhC']);
 ```
 
 ### Delivery (Rotas e Distancias)
