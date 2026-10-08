@@ -14,6 +14,8 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+## [1.9.0] - 2026-10-08
+
 ### Adicionado
 
 - 🏪 **`products()->search($query, storeIds: ...)`** — filtra a busca pelas lojas onde o produto teve preço coletado. Aceita um id (hashid de `/public/v1/stores`) ou um array; o array vira lista separada por vírgula, que é o que a API lê em `filter[store_id]`.
