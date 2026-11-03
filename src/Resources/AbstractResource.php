@@ -8,6 +8,7 @@ use QuantumTecnology\FalconDataHub\Auth\TokenManager;
 use QuantumTecnology\FalconDataHub\Exceptions\AuthException;
 use QuantumTecnology\FalconDataHub\Exceptions\ForbiddenException;
 use QuantumTecnology\FalconDataHub\Exceptions\NotFoundException;
+use QuantumTecnology\FalconDataHub\Exceptions\QuotaExceededException;
 use QuantumTecnology\FalconDataHub\Exceptions\RateLimitException;
 use QuantumTecnology\FalconDataHub\Exceptions\ServerException;
 use QuantumTecnology\FalconDataHub\Exceptions\ValidationException;
@@ -139,6 +140,19 @@ abstract class AbstractResource
             $statusCode === 422 => throw new ValidationException(
                 $apiResponse->message,
                 $apiResponse->errors,
+                $statusCode,
+                null,
+                $apiResponse,
+            ),
+            /*
+             * 402: acabou uma cota do plano (placas novas do dia ou tokens de
+             * IA). Até a 1.9 caía no `default` e voltava como resposta comum.
+             * A IA responde no formato OpenAI (`error.type`/`error.message`).
+             */
+            $statusCode === 402 => throw new QuotaExceededException(
+                (string) ($body['error']['message'] ?? $apiResponse->message),
+                isset($body['code']) ? (string) $body['code'] : (isset($body['error']['type']) ? (string) $body['error']['type'] : null),
+                isset($body['data']['resets_at']) ? (string) $body['data']['resets_at'] : null,
                 $statusCode,
                 null,
                 $apiResponse,

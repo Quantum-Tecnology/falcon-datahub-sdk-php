@@ -389,6 +389,7 @@ O SDK lanca exceptions tipadas para cada cenario:
 use QuantumTecnology\FalconDataHub\Exceptions\AuthException;
 use QuantumTecnology\FalconDataHub\Exceptions\ForbiddenException;
 use QuantumTecnology\FalconDataHub\Exceptions\NotFoundException;
+use QuantumTecnology\FalconDataHub\Exceptions\QuotaExceededException;
 use QuantumTecnology\FalconDataHub\Exceptions\RateLimitException;
 use QuantumTecnology\FalconDataHub\Exceptions\ServerException;
 use QuantumTecnology\FalconDataHub\Exceptions\TimeoutException;
@@ -402,8 +403,12 @@ try {
 } catch (ValidationException $e) {
     // Dados invalidos
     print_r($e->getErrors());
+} catch (QuotaExceededException $e) {
+    // Cota do plano esgotada (402): placas novas do dia ou tokens de IA.
+    // Na placa (isVehicleDailyQuota()), as ja conhecidas continuam
+    // respondendo: siga para a proxima placa. Renova em getResetsAt().
 } catch (RateLimitException $e) {
-    // Limite de requisicoes excedido
+    // Limite de requisicoes por hora excedido (429): espere
     echo "Tente novamente em {$e->getRetryAfter()} segundos";
 } catch (ForbiddenException $e) {
     // A chave fdx_ nao tem a permissao da rota
