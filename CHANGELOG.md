@@ -26,8 +26,8 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 #### ⚠️ Requer atenção
 
-- **Mudança de comportamento numa versão minor:** quem captura `RateLimitException` para a cota de placa passa a receber `QuotaExceededException`. Nenhum dos consumidores da casa (crmhub, fiscalhub, trade) consulta placa nem trata `RateLimitException`, conferido em 03/11/2026.
-- Funciona com qualquer versão da API: contra a API antiga (429 na placa) o comportamento é o da 1.9. Publicar depois do deploy da API (Falcon-BigData-Service `fix/cota-placa-402`).
+- **Mudança de comportamento numa versão minor:** quem captura `RateLimitException` para a cota de placa passa a receber `QuotaExceededException`. Quem não tratava nenhuma das duas não é afetado.
+- Funciona com qualquer versão da API: contra a API antiga (429 na placa) o comportamento é o da 1.9.
 
 ## [1.9.0] - 2026-10-08
 
