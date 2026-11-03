@@ -22,8 +22,8 @@ use Throwable;
  */
 class QuotaExceededException extends FalconException
 {
-    public const string VEHICLE_DAILY_QUOTA = 'vehicle_daily_quota_exceeded';
-    public const string AI_QUOTA            = 'insufficient_quota';
+    public const VEHICLE_DAILY_QUOTA = 'vehicle_daily_quota_exceeded';
+    public const AI_QUOTA            = 'insufficient_quota';
 
     public function __construct(
         string $message = 'Quota exceeded',
