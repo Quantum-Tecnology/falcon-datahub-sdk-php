@@ -14,6 +14,14 @@ final class VehicleResource extends AbstractResource
      *
      * Aceita placa no formato Mercosul (ABC1D23) ou antigo (ABC1234),
      * com ou sem hifen/maiusculas - sera normalizada no servidor.
+     *
+     * Cota diaria de placas novas esgotada: lanca `QuotaExceededException`
+     * (402, `isVehicleDailyQuota()`). Placas que ja estao na base continuam
+     * respondendo, entao siga para a proxima placa em vez de parar.
+     * `RateLimitException` (429) e o limite por hora: ai sim, espere.
+     *
+     * @throws \QuantumTecnology\FalconDataHub\Exceptions\QuotaExceededException
+     * @throws \QuantumTecnology\FalconDataHub\Exceptions\RateLimitException
      */
     public function search(string $placa): ApiResponse
     {

@@ -14,6 +14,21 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+### Adicionado
+
+- 💳 **`QuotaExceededException` para o HTTP 402 (cota do plano esgotada).** Até a 1.9 o 402 caía no `default` do tratamento de erro e voltava como resposta comum: quem integrava seguia achando que a chamada tinha dado certo. Agora lança a exceção, com `getReason()` dizendo qual cota acabou:
+  - `vehicle_daily_quota_exceeded` (`isVehicleDailyQuota()`): a cota diária de placas **novas**. Placas que já estão na base continuam respondendo, então o certo é seguir para a próxima placa, não parar. `getResetsAt()` diz quando renova.
+  - `insufficient_quota`: a cota de tokens de IA do mês, lida do corpo no formato OpenAI (`error.type`/`error.message`).
+
+### Alterado
+
+- **A cota diária de placas deixa de chegar como `RateLimitException`.** A API passou a responder 402 nesse caso (antes, 429), porque cada 429 da cota gastava o limite por hora e quem seguia tentando para achar as placas já conhecidas acabava bloqueado em tudo. `RateLimitException` (429) fica só para o limite por hora, que é o caso de esperar.
+
+#### ⚠️ Requer atenção
+
+- **Mudança de comportamento numa versão minor:** quem captura `RateLimitException` para a cota de placa passa a receber `QuotaExceededException`. Nenhum dos consumidores da casa (crmhub, fiscalhub, trade) consulta placa nem trata `RateLimitException`, conferido em 03/11/2026.
+- Funciona com qualquer versão da API: contra a API antiga (429 na placa) o comportamento é o da 1.9. Publicar depois do deploy da API (Falcon-BigData-Service `fix/cota-placa-402`).
+
 ## [1.9.0] - 2026-10-08
 
 ### Adicionado
