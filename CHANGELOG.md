@@ -14,6 +14,8 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+## [1.10.0] - 2026-11-03
+
 ### Adicionado
 
 - 💳 **`QuotaExceededException` para o HTTP 402 (cota do plano esgotada).** Até a 1.9 o 402 caía no `default` do tratamento de erro e voltava como resposta comum: quem integrava seguia achando que a chamada tinha dado certo. Agora lança a exceção, com `getReason()` dizendo qual cota acabou:
